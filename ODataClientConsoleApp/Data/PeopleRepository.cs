@@ -14,7 +14,19 @@ namespace ODataClientConsoleApp.Data
         public async Task CreatePerson(Person person)
         {
             Context.AddObject("People", person);
-            var response = await Context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
+        }
+
+        public async Task RemovePerson(string userName)
+        {
+            var person = await FindByUserName(userName);
+            Context.DeleteObject(person);
+            await Context.SaveChangesAsync();
+        }
+
+        public Task UpdatePerson(Person person)
+        {
+            return Task.CompletedTask;
         }
 
         public async Task<IEnumerable<Person>> FindAll()

@@ -17,6 +17,7 @@ namespace ODataClientConsoleApp
 
             services.AddTransient<ListCommand>();
             services.AddTransient<CreateCommand>();
+            services.AddTransient<RemoveCommand>();
             services.AddTransient<SearchCommand>();
             services.AddTransient<DetailsCommand>();
             services.AddTransient<FilterCommand>();

@@ -31,13 +31,14 @@ namespace ODataClientConsoleApp
 
                 try
                 {
-                    var result = Parser.Default.ParseArguments<ListOption, CreateOption,
+                    var result = Parser.Default.ParseArguments<ListOption, CreateOption, RemoveOption,
                         SearchOption, FilterOption, DetailsOption>(CommandLineUtil.CommandLineToArgs(input));
                     
                     var task = result
                         .MapResult(
                             (ListOption _) => serviceProvider.ResolveWith<ListCommand>().Execute(),
                             (CreateOption opts) => serviceProvider.ResolveWith<CreateCommand>(opts).Execute(),
+                            (RemoveOption opts) => serviceProvider.ResolveWith<RemoveCommand>(opts).Execute(),
                             (SearchOption opts) => serviceProvider.ResolveWith<SearchCommand>(opts).Execute(),
                             (FilterOption opts) => serviceProvider.ResolveWith<FilterCommand>(opts).Execute(),
                             (DetailsOption opts) => serviceProvider.ResolveWith<DetailsCommand>(opts).Execute(),
