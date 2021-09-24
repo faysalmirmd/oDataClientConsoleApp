@@ -23,6 +23,13 @@ namespace ODataClientConsoleApp.Command
 
         public async Task Execute()
         {
+            var result = await ValidatePerson();
+            if (!result)
+            {
+                View.ShowMessage("Person already exists. try with different username");
+                return;
+            }
+
             var person = new Person
             {
                 UserName = _option.UserName,
@@ -43,6 +50,17 @@ namespace ODataClientConsoleApp.Command
             SetGender(person);
 
             await PeopleRepository.CreatePerson(person);
+            await ShowCreatedPerson(person);
+        }
+
+        private async Task<bool> ValidatePerson()
+        {
+            var existingPerson = await PeopleRepository.FindByUserName(_option.UserName);
+            return existingPerson == null;
+        }
+
+        private async Task ShowCreatedPerson(Person person)
+        {
             var createdPerson = await PeopleRepository.FindByUserName(_option.UserName);
             if (createdPerson != null)
                 View.ShowPersonDetails(person);
@@ -65,8 +83,8 @@ namespace ODataClientConsoleApp.Command
         private bool SetEmails(Person person)
         {
             if (string.IsNullOrEmpty(_option.Emails)) return true;
-            _option.Emails = _option.Emails.Replace(" ", "");
-            _option.Emails = _option.Emails.Replace("\t", "");
+
+            _option.Emails = StringUtil.ReplaceWhitespace(_option.Emails, "");
 
             var emails = _option.Emails.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
             if (emails.Any(e => !ValidationUtil.IsValidEmail(e))) return false;
