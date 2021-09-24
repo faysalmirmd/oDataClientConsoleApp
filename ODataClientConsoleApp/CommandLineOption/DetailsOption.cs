@@ -3,9 +3,8 @@
 namespace ODataClientConsoleApp.CommandLineOption
 {
     [Verb("details", HelpText = "Details view of a person by UserName with parameter -u <username>")]
-    public class DetailsOption
+    public class DetailsOption : PersonKeyBaseOption
     {
-        [Option('u', "UserName", Required = true, HelpText = "Username for the Person")]
-        public string UserName { get; set; }
+
     }
 }

@@ -12,16 +12,13 @@ namespace ODataClientConsoleApp.CommandLineOption
                                    "City -c <city>\n" +
                                    "Country -s <country>\n" +
                                    "Region -r <region>\n")]
-    public class CreateOption
+    public class CreateOption : PersonKeyBaseOption
     {
         [Option('f', "FirstName", Required = true, HelpText = "FirstName for the Person")]
         public string FirstName { get; set; }
 
         [Option('l', "LastName", Required = true, HelpText = "LastName for the Person")]
         public string LastName { get; set; }
-
-        [Option('u', "UserName", Required = true, HelpText = "Username for the Person")]
-        public string UserName { get; set; }
 
         [Option('e', "Emails", HelpText = "Emails for the Person", Default = "")]
         public string Emails { get; set; }
