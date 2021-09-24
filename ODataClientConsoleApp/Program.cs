@@ -31,14 +31,13 @@ namespace ODataClientConsoleApp
 
                 try
                 {
-                    //input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                    var input2 = new List<string>() {"filter", "-f", "FirstName eq 'Scott'"};
-                    
-                    var result = Parser.Default.ParseArguments<ListOption, SearchOption, FilterOption, DetailsOption>(CommandLineUtil.CommandLineToArgs(input));
+                    var result = Parser.Default.ParseArguments<ListOption, CreateOption,
+                        SearchOption, FilterOption, DetailsOption>(CommandLineUtil.CommandLineToArgs(input));
                     
                     var task = result
                         .MapResult(
                             (ListOption _) => serviceProvider.ResolveWith<ListCommand>().Execute(),
+                            (CreateOption opts) => serviceProvider.ResolveWith<CreateCommand>(opts).Execute(),
                             (SearchOption opts) => serviceProvider.ResolveWith<SearchCommand>(opts).Execute(),
                             (FilterOption opts) => serviceProvider.ResolveWith<FilterCommand>(opts).Execute(),
                             (DetailsOption opts) => serviceProvider.ResolveWith<DetailsCommand>(opts).Execute(),
@@ -62,7 +61,7 @@ namespace ODataClientConsoleApp
             //    .SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
             //    .AddJsonFile("appsettings.json", false)
             //    .Build();
-            //serviceCollection.addo
+            
             //serviceCollection.AddSingleton(configuration);
             //serviceCollection.AddTransient<App>();
             serviceCollection.RegisterServices();

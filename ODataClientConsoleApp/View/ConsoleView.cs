@@ -1,18 +1,15 @@
-﻿using Microsoft.OData.SampleService.Models.TripPin;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Microsoft.OData.SampleService.Models.TripPin;
 
 namespace ODataClientConsoleApp.View
 {
-    public class ConsoleView: IView
+    public class ConsoleView : IView
     {
-        public void ShowPeople(List<Person> people)
+        public void ShowPeople(IEnumerable<Person> people)
         {
-            foreach (var person in people)
-            {
-                ShowPerson(person);
-            }
+            foreach (var person in people) ShowPerson(person);
         }
 
         public void ShowPerson(Person person)
@@ -26,9 +23,14 @@ namespace ODataClientConsoleApp.View
             Console.WriteLine($"UserName: {person.UserName}");
             Console.WriteLine($"Gender: {person.Gender}");
             Console.WriteLine($"Photo: {person.Photo?.Name}");
-            var emails = string.Join(", ", person.Emails); 
+            var emails = string.Join(", ", person.Emails);
             Console.WriteLine($"Emails: {emails}");
             PrintAddress(person.AddressInfo);
+        }
+
+        public void ShowMessage(string message)
+        {
+            Console.WriteLine(message);
         }
 
         private void PrintAddress(ObservableCollection<Location> personAddressInfo)
@@ -43,11 +45,6 @@ namespace ODataClientConsoleApp.View
                 Console.WriteLine($"  Country Region: {location.City.CountryRegion}");
                 Console.WriteLine();
             }
-        }
-
-        public void ShowMessage(string message)
-        {
-            Console.WriteLine(message);
         }
 
         public void ShowLoading()

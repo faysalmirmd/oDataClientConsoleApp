@@ -14,7 +14,9 @@ namespace ODataClientConsoleApp
             services.AddSingleton<IPeopleRepository, PeopleRepository>();
             services.AddSingleton<IPeopleSearchRepository, PeopleSearchRepository>();
             services.AddSingleton<IView, ConsoleView>();
+
             services.AddTransient<ListCommand>();
+            services.AddTransient<CreateCommand>();
             services.AddTransient<SearchCommand>();
             services.AddTransient<DetailsCommand>();
             services.AddTransient<FilterCommand>();

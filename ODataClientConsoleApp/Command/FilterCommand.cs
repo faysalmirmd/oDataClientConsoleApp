@@ -1,15 +1,17 @@
-﻿using ODataClientConsoleApp.CommandLineOption;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using ODataClientConsoleApp.CommandLineOption;
 using ODataClientConsoleApp.Data;
 using ODataClientConsoleApp.View;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ODataClientConsoleApp.Command
 {
-    public class FilterCommand: BaseCommand, ICommand
+    public class FilterCommand : BaseCommand, ICommand
     {
         private readonly FilterOption _option;
-        public FilterCommand(IPeopleRepository peopleRepository, IView view, FilterOption option) : base(peopleRepository, view)
+
+        public FilterCommand(IPeopleRepository peopleRepository, IView view, FilterOption option) : base(
+            peopleRepository, view)
         {
             _option = option;
         }
@@ -17,7 +19,7 @@ namespace ODataClientConsoleApp.Command
         public async Task Execute()
         {
             var people = (await PeopleRepository.Filter(_option.FilterQuery)).ToList();
-            if(people.Any())
+            if (people.Any())
                 View.ShowPeople(people);
             else
                 View.ShowMessage("No person found.");

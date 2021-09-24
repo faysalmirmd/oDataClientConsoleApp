@@ -7,6 +7,7 @@ namespace ODataClientConsoleApp.Command
     {
         protected readonly IPeopleRepository PeopleRepository;
         protected readonly IView View;
+
         protected BaseCommand(IPeopleRepository peopleRepository, IView view)
         {
             PeopleRepository = peopleRepository;

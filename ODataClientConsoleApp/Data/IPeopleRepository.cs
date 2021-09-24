@@ -6,7 +6,8 @@ namespace ODataClientConsoleApp.Data
 {
     public interface IPeopleRepository
     {
-        public Task<List<Person>> FindAll();
+        public Task CreatePerson(Person person);
+        public Task<IEnumerable<Person>> FindAll();
         public Task<Person> FindByUserName(string userName);
         Task<IEnumerable<Person>> Filter(string optionFilterQuery);
     }

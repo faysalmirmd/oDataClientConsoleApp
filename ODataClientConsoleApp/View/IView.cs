@@ -5,7 +5,7 @@ namespace ODataClientConsoleApp.View
 {
     public interface IView
     {
-        void ShowPeople(List<Person> people);
+        void ShowPeople(IEnumerable<Person> people);
         void ShowPerson(Person person);
         void ShowPersonDetails(Person person);
         void ShowMessage(string message);
