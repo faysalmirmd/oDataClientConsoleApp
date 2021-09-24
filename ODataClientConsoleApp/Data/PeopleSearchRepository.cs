@@ -1,9 +1,9 @@
-﻿using Microsoft.OData.Client;
-using Microsoft.OData.Extensions.Client;
-using Microsoft.OData.SampleService.Models.TripPin;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.OData.Client;
+using Microsoft.OData.Extensions.Client;
+using Microsoft.OData.SampleService.Models.TripPin;
 
 namespace ODataClientConsoleApp.Data
 {
@@ -19,11 +19,6 @@ namespace ODataClientConsoleApp.Data
                 new Uri("https://services.odata.org/v4/(S(34wtn2c0hkuk5ekg0pjr513b))/TripPinServiceRW/"));
         }
 
-        private void ContextOnBuildingRequest(object? sender, BuildingRequestEventArgs eventArgs)
-        {
-            eventArgs.RequestUri = new Uri($"https://services.odata.org/v4/(S(34wtn2c0hkuk5ekg0pjr513b))/TripPinServiceRW/People?$search={_searchText}");
-        }
-
         public async Task<IEnumerable<Person>> Search(string searchText)
         {
             _searchText = searchText;
@@ -33,6 +28,13 @@ namespace ODataClientConsoleApp.Data
 
             _context.BuildingRequest -= ContextOnBuildingRequest;
             return people;
+        }
+
+        private void ContextOnBuildingRequest(object? sender, BuildingRequestEventArgs eventArgs)
+        {
+            eventArgs.RequestUri =
+                new Uri(
+                    $"https://services.odata.org/v4/(S(34wtn2c0hkuk5ekg0pjr513b))/TripPinServiceRW/People?$search={_searchText}");
         }
     }
 }

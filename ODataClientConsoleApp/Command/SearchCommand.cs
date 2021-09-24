@@ -13,7 +13,8 @@ namespace ODataClientConsoleApp.Command
         private readonly SearchOption _option;
         private readonly IPeopleSearchRepository _peopleSearchRepository;
 
-        public SearchCommand(IPeopleRepository peopleRepository, IPeopleSearchRepository peopleSearchRepository, IView view, SearchOption option) : base(
+        public SearchCommand(IPeopleRepository peopleRepository, IPeopleSearchRepository peopleSearchRepository,
+            IView view, SearchOption option) : base(
             peopleRepository, view)
         {
             _peopleSearchRepository = peopleSearchRepository;
@@ -27,14 +28,13 @@ namespace ODataClientConsoleApp.Command
             {
                 people = (await _peopleSearchRepository.Search(_option.SearchText)).ToList();
                 if (!string.IsNullOrEmpty(_option.UserName))
-                {
                     people = people.Where(p => p.UserName.Equals(_option.UserName)).ToList();
-                }
             }
             else if (!string.IsNullOrEmpty(_option.UserName))
             {
                 var person = await PeopleRepository.FindByUserName(_option.UserName);
-                people.Add(person);
+                if (person != null)
+                    people.Add(person);
             }
             else
             {
