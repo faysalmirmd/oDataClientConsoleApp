@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OData.Extensions.Client;
-using ODataClientConsoleApp.Command;
 using ODataClientConsoleApp.Data;
+using ODataClientConsoleApp.Util;
 using ODataClientConsoleApp.View;
 
 namespace ODataClientConsoleApp
@@ -15,13 +16,9 @@ namespace ODataClientConsoleApp
             services.AddSingleton<IPeopleSearchRepository, PeopleSearchRepository>();
             services.AddSingleton<IView, ConsoleView>();
 
-            services.AddTransient<ListCommand>();
-            services.AddTransient<CreateCommand>();
-            services.AddTransient<UpdateCommand>();
-            services.AddTransient<RemoveCommand>();
-            services.AddTransient<SearchCommand>();
-            services.AddTransient<DetailsCommand>();
-            services.AddTransient<FilterCommand>();
+            //Registering all commands
+            var commands = AssemblyUtil.GetTypes("ODataClientConsoleApp.Command", "Command", "Base");
+            commands.ToList().ForEach(type => services.AddTransient(type));
 
             services.AddODataClient("TripPin")
                 .ConfigureODataClient(dsc =>
