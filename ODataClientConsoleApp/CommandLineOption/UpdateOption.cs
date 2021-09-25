@@ -10,7 +10,9 @@ namespace ODataClientConsoleApp.CommandLineOption
                                    "Address -a <address>\n" +
                                    "City -c <city>\n" +
                                    "Country -s <country>\n" +
-                                   "Region -r <region>\n")]
+                                   "Region -r <region>\n" +
+                                   "Note: Double quote(\"\") is required around parameter values containing whitespace i. e \n" +
+                                   "update -u <username> -a \"Bandar Utama, 47800 Petaling Jaya, Selangor\"")]
     public class UpdateOption : CreateUpdateBaseOption
     {
         [Option('f', "FirstName", HelpText = "FirstName for the Person")]

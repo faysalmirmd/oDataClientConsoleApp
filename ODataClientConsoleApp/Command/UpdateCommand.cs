@@ -36,7 +36,17 @@ namespace ODataClientConsoleApp.Command
             if (string.IsNullOrEmpty(_option.Address) && string.IsNullOrEmpty(_option.City) &&
                 string.IsNullOrEmpty(_option.Country)) return;
 
-            if (!person.AddressInfo.Any()) person.AddressInfo.Add(new Location {City = new City()});
+            if (!person.AddressInfo.Any())
+                person.AddressInfo.Add(
+                    new Location
+                    {
+                        City = new City
+                        {
+                            Name = string.Empty,
+                            CountryRegion = string.Empty,
+                            Region = string.Empty
+                        }
+                    });
 
             if (!string.IsNullOrEmpty(_option.Address)) person.AddressInfo[0].Address = _option.Address;
             if (!string.IsNullOrEmpty(_option.City)) person.AddressInfo[0].City.Name = _option.City;

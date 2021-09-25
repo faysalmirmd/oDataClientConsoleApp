@@ -18,7 +18,7 @@ namespace ODataClientConsoleApp.CommandLineOption
                                         "   length(Property1) eq 19\n" +
                                         "   substring(Property1, 1, 2) eq 'ab'\n" +
                                         "and/or can be applied i.e Property1 eq 'Value1' and Property2 eq 'Value2'\n" +
-                                        "Note: Double quote(\"\") is required around the filter query")]
+                                        "Note: Double quote(\"\") is required around parameter values containing spaces i. e the filter query")]
     public class FilterOption
     {
         [Option('f', "FilterQuery", Required = true, HelpText = "OData Filter Query Parameter", Default = "")]

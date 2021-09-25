@@ -55,6 +55,7 @@ namespace ODataClientConsoleApp.Command
 
             var emails = _option.Emails.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
             if (emails.Any(e => !ValidationUtil.IsValidEmail(e))) return false;
+            person.Emails.Clear();
             emails.ForEach(e => person.Emails.Add(e));
             return true;
         }

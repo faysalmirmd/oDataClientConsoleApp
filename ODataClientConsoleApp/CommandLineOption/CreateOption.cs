@@ -11,7 +11,9 @@ namespace ODataClientConsoleApp.CommandLineOption
                                    "Address -a <address>\n" +
                                    "City -c <city>\n" +
                                    "Country -s <country>\n" +
-                                   "Region -r <region>\n")]
+                                   "Region -r <region>\n" +
+                                   "Note: Double quote(\"\") is required around parameter values containing whitespace i. e \n" +
+                                   "create -u <username> -s \"United states\"")]
     public class CreateOption : CreateUpdateBaseOption
     {
         
