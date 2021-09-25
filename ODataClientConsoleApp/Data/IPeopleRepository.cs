@@ -13,6 +13,6 @@ namespace ODataClientConsoleApp.Data
         public Task SaveChangesInBatch();
         public Task<IEnumerable<Person>> FindAll();
         public Task<Person> FindByUserName(string userName);
-        Task<IEnumerable<Person>> Filter(string optionFilterQuery);
+        Task<List<List<Person>>> Filter(List<string> filterQueries);
     }
 }

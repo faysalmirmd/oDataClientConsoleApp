@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.OData.Client;
 using Microsoft.OData.Extensions.Client;
@@ -41,10 +42,21 @@ namespace ODataClientConsoleApp.Data
             return person;
         }
 
-        public async Task<IEnumerable<Person>> Filter(string optionFilterQuery)
+        public async Task<List<List<Person>>> Filter(List<string> filterQueries)
         {
-            var result = await Context.People.AddQueryOption("$filter", optionFilterQuery).ExecuteAsync();
-            return result;
+            DataServiceRequest[] queries = filterQueries.Select(q => Context.People.AddQueryOption("$filter", q)).ToArray();
+            var batchResponse = await Context.ExecuteBatchAsync(queries);
+            var list = new List<List<Person>>();
+
+            foreach (var response in batchResponse)
+            {
+                if (response is QueryOperationResponse<Person> people)
+                {
+                    list.Add(people.ToList());
+                }
+            }
+            
+            return list;
         }
 
         public Task SaveChanges()

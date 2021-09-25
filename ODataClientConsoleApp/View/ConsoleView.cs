@@ -10,6 +10,7 @@ namespace ODataClientConsoleApp.View
         public void ShowPeople(IEnumerable<Person> people)
         {
             foreach (var person in people) ShowPerson(person);
+            Console.WriteLine();
         }
 
         public void ShowPerson(Person person)

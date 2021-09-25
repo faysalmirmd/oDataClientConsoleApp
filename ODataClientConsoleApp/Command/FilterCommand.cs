@@ -18,11 +18,18 @@ namespace ODataClientConsoleApp.Command
 
         public async Task Execute()
         {
-            var people = (await PeopleRepository.Filter(_option.FilterQuery)).ToList();
-            if (people.Any())
-                View.ShowPeople(people);
-            else
-                View.ShowMessage("No person found.");
+            var queries = _option.FilterQuery.Split('|').ToList();
+            var peopleList = (await PeopleRepository.Filter(queries)).ToList();
+            var index = 0;
+            foreach (var people in peopleList)
+            {
+                View.ShowMessage($"Result of Query {queries[index]}:");
+                if (people.Any())
+                    View.ShowPeople(people);
+                else
+                    View.ShowMessage("No person found.");
+                index++;
+            }
         }
     }
 }
