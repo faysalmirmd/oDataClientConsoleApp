@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.OData.Client;
 using Microsoft.OData.Extensions.Client;
 using Microsoft.OData.SampleService.Models.TripPin;
@@ -9,14 +10,15 @@ namespace ODataClientConsoleApp.Data
 {
     public class PeopleSearchRepository : IPeopleSearchRepository
     {
+        private readonly IConfiguration _configuration;
         private readonly DefaultContainer _context;
         private string _searchText;
 
-        public PeopleSearchRepository(IODataClientFactory oDataClientFactory)
+        public PeopleSearchRepository(IODataClientFactory oDataClientFactory, IConfigurationRoot configuration)
         {
+            _configuration = configuration;
             _context = oDataClientFactory.CreateClient<DefaultContainer>(
-                //new Uri("https://services.odata.org/V4/TripPinServiceRW/"));
-                new Uri("https://services.odata.org/v4/(S(34wtn2c0hkuk5ekg0pjr513b))/TripPinServiceRW/"));
+                new Uri(_configuration.GetValue<string>("serviceRoot")));
         }
 
         public async Task<IEnumerable<Person>> Search(string searchText)
@@ -34,7 +36,7 @@ namespace ODataClientConsoleApp.Data
         {
             eventArgs.RequestUri =
                 new Uri(
-                    $"https://services.odata.org/v4/(S(34wtn2c0hkuk5ekg0pjr513b))/TripPinServiceRW/People?$search={_searchText}");
+                    $"{_configuration.GetValue<string>("serviceRoot")}People?$search={_searchText}");
         }
     }
 }

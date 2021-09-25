@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.Configuration;
 using Microsoft.OData.Extensions.Client;
 using Microsoft.OData.SampleService.Models.TripPin;
 
@@ -8,11 +9,10 @@ namespace ODataClientConsoleApp.Data
     {
         protected readonly DefaultContainer Context;
 
-        protected BaseRepository(IODataClientFactory oDataClientFactory)
+        protected BaseRepository(IODataClientFactory oDataClientFactory, IConfigurationRoot configuration)
         {
             Context = oDataClientFactory.CreateClient<DefaultContainer>(
-                //new Uri("https://services.odata.org/V4/TripPinServiceRW/"));
-                new Uri("https://services.odata.org/v4/(S(34wtn2c0hkuk5ekg0pjr513b))/TripPinServiceRW/"));
+                new Uri(configuration.GetValue<string>("serviceRoot")));
         }
     }
 }

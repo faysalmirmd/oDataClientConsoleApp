@@ -1,21 +1,23 @@
-﻿using CommandLine;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using CommandLine;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ODataClientConsoleApp.Command;
 using ODataClientConsoleApp.CommandLineOption;
 using ODataClientConsoleApp.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using ODataClientConsoleApp.Util;
+using SearchOption = ODataClientConsoleApp.CommandLineOption.SearchOption;
 
 namespace ODataClientConsoleApp
 {
-    class Program
+    internal class Program
     {
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             var serviceProvider = ConfigureServices(new ServiceCollection());
-            
+
             var input = "--help";
 
             while (true)
@@ -31,17 +33,22 @@ namespace ODataClientConsoleApp
 
                 try
                 {
-                    var result = Parser.Default.ParseArguments<ListOption, DetailsOption, CreateOption, UpdateOption, RemoveOption, BatchCommitOption,
-                        SearchOption, FilterOption>(CommandLineUtil.CommandLineToArgs(input));
-                    
+                    var result = Parser.Default
+                        .ParseArguments<ListOption, DetailsOption, CreateOption, UpdateOption, RemoveOption,
+                            BatchCommitOption,
+                            SearchOption, FilterOption>(CommandLineUtil.CommandLineToArgs(input));
+
                     var task = result
                         .MapResult(
                             (ListOption _) => serviceProvider.ResolveWith<ListCommand>().Execute(),
-                            (CreateOption opts) => opts.Batch ? serviceProvider.ResolveWith<CreateBatchCommand>(opts).Execute() 
+                            (CreateOption opts) => opts.Batch
+                                ? serviceProvider.ResolveWith<CreateBatchCommand>(opts).Execute()
                                 : serviceProvider.ResolveWith<CreateCommand>(opts).Execute(),
-                            (UpdateOption opts) => opts.Batch ? serviceProvider.ResolveWith<UpdateBatchCommand>(opts).Execute() 
+                            (UpdateOption opts) => opts.Batch
+                                ? serviceProvider.ResolveWith<UpdateBatchCommand>(opts).Execute()
                                 : serviceProvider.ResolveWith<UpdateCommand>(opts).Execute(),
-                            (RemoveOption opts) => opts.Batch ? serviceProvider.ResolveWith<RemoveBatchCommand>(opts).Execute() 
+                            (RemoveOption opts) => opts.Batch
+                                ? serviceProvider.ResolveWith<RemoveBatchCommand>(opts).Execute()
                                 : serviceProvider.ResolveWith<RemoveCommand>(opts).Execute(),
                             (SearchOption opts) => serviceProvider.ResolveWith<SearchCommand>(opts).Execute(),
                             (FilterOption opts) => serviceProvider.ResolveWith<FilterCommand>(opts).Execute(),
@@ -50,7 +57,7 @@ namespace ODataClientConsoleApp
                             _ => Task.CompletedTask);
 
                     await task;
-                    
+
                     input = Console.ReadLine();
                 }
                 catch (Exception ex)
@@ -63,13 +70,12 @@ namespace ODataClientConsoleApp
 
         private static IServiceProvider ConfigureServices(IServiceCollection serviceCollection)
         {
-            //var configuration = new ConfigurationBuilder()
-            //    .SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
-            //    .AddJsonFile("appsettings.json", false)
-            //    .Build();
-            
-            //serviceCollection.AddSingleton(configuration);
-            //serviceCollection.AddTransient<App>();
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetParent(AppContext.BaseDirectory)?.FullName)
+                .AddJsonFile("appsettings.json", false)
+                .Build();
+
+            serviceCollection.AddSingleton(configuration);
             serviceCollection.RegisterServices();
 
             return serviceCollection.BuildServiceProvider();
