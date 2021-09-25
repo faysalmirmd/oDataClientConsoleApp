@@ -23,11 +23,17 @@ namespace ODataClientConsoleApp.Command
                 return;
             }
 
-            await PeopleRepository.RemovePerson(_options.UserName);
-            var removedPerson = await PeopleRepository.FindByUserName(_options.UserName);
-            if(removedPerson == null)
-                View.ShowMessage("Person removed.");
+            await RemovePerson(_options.UserName);
+        }
 
+        protected virtual async Task RemovePerson(string userName)
+        {
+            await PeopleRepository.RemovePerson(_options.UserName);
+            await PeopleRepository.SaveChanges();
+
+            var removedPerson = await PeopleRepository.FindByUserName(_options.UserName);
+            if (removedPerson == null)
+                View.ShowMessage("Person removed.");
         }
     }
 }

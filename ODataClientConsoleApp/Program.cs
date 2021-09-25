@@ -32,17 +32,21 @@ namespace ODataClientConsoleApp
                 try
                 {
                     var result = Parser.Default.ParseArguments<ListOption, CreateOption, UpdateOption, RemoveOption,
-                        SearchOption, FilterOption, DetailsOption>(CommandLineUtil.CommandLineToArgs(input));
+                        SearchOption, FilterOption, DetailsOption, BatchCommitOption>(CommandLineUtil.CommandLineToArgs(input));
                     
                     var task = result
                         .MapResult(
                             (ListOption _) => serviceProvider.ResolveWith<ListCommand>().Execute(),
-                            (CreateOption opts) => serviceProvider.ResolveWith<CreateCommand>(opts).Execute(),
-                            (UpdateOption opts) => serviceProvider.ResolveWith<UpdateCommand>(opts).Execute(),
-                            (RemoveOption opts) => serviceProvider.ResolveWith<RemoveCommand>(opts).Execute(),
+                            (CreateOption opts) => opts.Batch ? serviceProvider.ResolveWith<CreateBatchCommand>(opts).Execute() 
+                                : serviceProvider.ResolveWith<CreateCommand>(opts).Execute(),
+                            (UpdateOption opts) => opts.Batch ? serviceProvider.ResolveWith<UpdateBatchCommand>(opts).Execute() 
+                                : serviceProvider.ResolveWith<UpdateCommand>(opts).Execute(),
+                            (RemoveOption opts) => opts.Batch ? serviceProvider.ResolveWith<RemoveBatchCommand>(opts).Execute() 
+                                : serviceProvider.ResolveWith<RemoveCommand>(opts).Execute(),
                             (SearchOption opts) => serviceProvider.ResolveWith<SearchCommand>(opts).Execute(),
                             (FilterOption opts) => serviceProvider.ResolveWith<FilterCommand>(opts).Execute(),
                             (DetailsOption opts) => serviceProvider.ResolveWith<DetailsCommand>(opts).Execute(),
+                            (BatchCommitOption _) => serviceProvider.ResolveWith<BatchCommitCommand>().Execute(),
                             _ => Task.CompletedTask);
 
                     await task;

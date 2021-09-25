@@ -2,7 +2,7 @@
 
 namespace ODataClientConsoleApp.CommandLineOption
 {
-    [Verb("update", HelpText = "Update a person by UserName -u <username> with parameters to update\n" +
+    [Verb("update", HelpText = "Update a person by UserName -u <username> with parameters to update, add -b true for batch operation\n" +
                                    "FirstName -f <firstname>\n" +
                                    "LastName -l <lastname>\n" +
                                    "Emails -e <comma separated emails>\n" +

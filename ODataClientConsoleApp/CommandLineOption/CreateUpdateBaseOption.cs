@@ -27,5 +27,8 @@ namespace ODataClientConsoleApp.CommandLineOption
 
         [Option('r', "Region", HelpText = "City Region for the Person", Default = "")]
         public string Region { get; set; }
+
+        [Option('b', "Batch", HelpText = "Operation is Batch mode", Default = false)]
+        public bool Batch { get; set; }
     }
 }

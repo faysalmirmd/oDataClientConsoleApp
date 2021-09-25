@@ -2,7 +2,7 @@
 
 namespace ODataClientConsoleApp.CommandLineOption
 {
-    [Verb("create", HelpText = "Create a person with parameters\n" +
+    [Verb("create", HelpText = "Create a person with parameters, add -b true for batch operation\n" +
                                    "UserName -u <username>\n" +
                                    "FirstName -f <firstname>\n" +
                                    "LastName -l <lastname>\n" +

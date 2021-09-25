@@ -41,7 +41,8 @@ namespace ODataClientConsoleApp.Command
 
         protected override async Task CreateOrUpdatePerson(Person person)
         {
-            await PeopleRepository.CreatePerson(person);
+            PeopleRepository.CreatePerson(person);
+            await PeopleRepository.SaveChanges();
             await ShowCreatedPerson(person);
         }
 
