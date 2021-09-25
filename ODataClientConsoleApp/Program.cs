@@ -31,7 +31,7 @@ namespace ODataClientConsoleApp
 
                 try
                 {
-                    var result = Parser.Default.ParseArguments<ListOption, CreateOption, RemoveOption,
+                    var result = Parser.Default.ParseArguments<ListOption, CreateOption, UpdateOption, RemoveOption,
                         SearchOption, FilterOption, DetailsOption>(CommandLineUtil.CommandLineToArgs(input));
                     
                     var task = result

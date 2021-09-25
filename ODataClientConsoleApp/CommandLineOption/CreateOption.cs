@@ -12,7 +12,7 @@ namespace ODataClientConsoleApp.CommandLineOption
                                    "City -c <city>\n" +
                                    "Country -s <country>\n" +
                                    "Region -r <region>\n")]
-    public class CreateOption : EditUpdateBaseOption
+    public class CreateOption : CreateUpdateBaseOption
     {
         
     }

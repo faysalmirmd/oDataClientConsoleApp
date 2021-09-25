@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommandLine;
+﻿using CommandLine;
 
 namespace ODataClientConsoleApp.CommandLineOption
 {
-    public class EditUpdateBaseOption : PersonKeyBaseOption
+    public class CreateUpdateBaseOption : PersonKeyBaseOption
     {
         [Option('f', "FirstName", Required = true, HelpText = "FirstName for the Person")]
         public virtual string FirstName { get; set; }

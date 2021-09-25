@@ -11,7 +11,7 @@ namespace ODataClientConsoleApp.CommandLineOption
                                    "City -c <city>\n" +
                                    "Country -s <country>\n" +
                                    "Region -r <region>\n")]
-    public class UpdateOption : EditUpdateBaseOption
+    public class UpdateOption : CreateUpdateBaseOption
     {
         [Option('f', "FirstName", HelpText = "FirstName for the Person")]
         public override string FirstName { get; set; }
