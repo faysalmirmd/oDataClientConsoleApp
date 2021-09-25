@@ -38,6 +38,7 @@ namespace ODataClientConsoleApp
                         .MapResult(
                             (ListOption _) => serviceProvider.ResolveWith<ListCommand>().Execute(),
                             (CreateOption opts) => serviceProvider.ResolveWith<CreateCommand>(opts).Execute(),
+                            (UpdateOption opts) => serviceProvider.ResolveWith<UpdateCommand>(opts).Execute(),
                             (RemoveOption opts) => serviceProvider.ResolveWith<RemoveCommand>(opts).Execute(),
                             (SearchOption opts) => serviceProvider.ResolveWith<SearchCommand>(opts).Execute(),
                             (FilterOption opts) => serviceProvider.ResolveWith<FilterCommand>(opts).Execute(),

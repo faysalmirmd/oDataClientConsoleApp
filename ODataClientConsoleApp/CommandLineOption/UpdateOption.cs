@@ -2,8 +2,7 @@
 
 namespace ODataClientConsoleApp.CommandLineOption
 {
-    [Verb("create", HelpText = "Create a person with parameters\n" +
-                                   "UserName -u <username>\n" +
+    [Verb("update", HelpText = "Update a person by UserName -u <username> with parameters to update\n" +
                                    "FirstName -f <firstname>\n" +
                                    "LastName -l <lastname>\n" +
                                    "Emails -e <comma separated emails>\n" +
@@ -12,8 +11,12 @@ namespace ODataClientConsoleApp.CommandLineOption
                                    "City -c <city>\n" +
                                    "Country -s <country>\n" +
                                    "Region -r <region>\n")]
-    public class CreateOption : EditUpdateBaseOption
+    public class UpdateOption : EditUpdateBaseOption
     {
-        
+        [Option('f', "FirstName", HelpText = "FirstName for the Person")]
+        public override string FirstName { get; set; }
+
+        [Option('l', "LastName", HelpText = "LastName for the Person")]
+        public override string LastName { get; set; }
     }
 }
