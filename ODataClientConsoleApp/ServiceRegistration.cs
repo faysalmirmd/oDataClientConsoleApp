@@ -18,6 +18,8 @@ namespace ODataClientConsoleApp
             services.AddSingleton<IView, ConsoleView>();
 
             //Registering all commands
+            //var name = nameof(ODataClientConsoleApp.Command);
+
             var commands = AssemblyUtil.GetTypes("ODataClientConsoleApp.Command", "Command", "Base");
             commands.ToList().ForEach(type => services.AddTransient(type));
 

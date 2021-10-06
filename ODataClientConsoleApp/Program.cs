@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using CommandLine;
 using Microsoft.Extensions.Configuration;
@@ -8,7 +10,6 @@ using ODataClientConsoleApp.Command;
 using ODataClientConsoleApp.CommandLineOption;
 using ODataClientConsoleApp.Extensions;
 using ODataClientConsoleApp.Util;
-using SearchOption = ODataClientConsoleApp.CommandLineOption.SearchOption;
 
 namespace ODataClientConsoleApp
 {
@@ -17,7 +18,8 @@ namespace ODataClientConsoleApp
         private static async Task Main(string[] args)
         {
             var serviceProvider = ConfigureServices(new ServiceCollection());
-
+            var types = AssemblyUtil.GetTypes("ODataClientConsoleApp.CommandLineOption", "Option", "Base").ToList();
+            var commandTypes = AssemblyUtil.GetTypes("ODataClientConsoleApp.Command", "Command", "Base").ToList();
             var input = "--help";
 
             while (true)
@@ -33,31 +35,15 @@ namespace ODataClientConsoleApp
 
                 try
                 {
-                    var result = Parser.Default
-                        .ParseArguments<ListOption, DetailsOption, CreateOption, UpdateOption, RemoveOption,
-                            BatchCommitOption,
-                            SearchOption, FilterOption>(CommandLineUtil.CommandLineToArgs(input));
+                    var res = Parser.Default.ParseArguments(CommandLineUtil.CommandLineToArgs(input), types.ToArray());
 
-                    var task = result
-                        .MapResult(
-                            (ListOption _) => serviceProvider.ResolveWith<ListCommand>().Execute(),
-                            (CreateOption opts) => opts.Batch
-                                ? serviceProvider.ResolveWith<CreateBatchCommand>(opts).Execute()
-                                : serviceProvider.ResolveWith<CreateCommand>(opts).Execute(),
-                            (UpdateOption opts) => opts.Batch
-                                ? serviceProvider.ResolveWith<UpdateBatchCommand>(opts).Execute()
-                                : serviceProvider.ResolveWith<UpdateCommand>(opts).Execute(),
-                            (RemoveOption opts) => opts.Batch
-                                ? serviceProvider.ResolveWith<RemoveBatchCommand>(opts).Execute()
-                                : serviceProvider.ResolveWith<RemoveCommand>(opts).Execute(),
-                            (SearchOption opts) => serviceProvider.ResolveWith<SearchCommand>(opts).Execute(),
-                            (FilterOption opts) => serviceProvider.ResolveWith<FilterCommand>(opts).Execute(),
-                            (DetailsOption opts) => serviceProvider.ResolveWith<DetailsCommand>(opts).Execute(),
-                            (BatchCommitOption _) => serviceProvider.ResolveWith<BatchCommitCommand>().Execute(),
-                            _ => Task.CompletedTask);
+                    var commandType = commandTypes.FirstOrDefault(ct => ct.Name.Equals(res.TypeInfo.Current.Name.Replace("Option", "Command")));
 
-                    await task;
-
+                    if (commandType != null)
+                    {
+                        await MapResult(serviceProvider, res, commandTypes);
+                    }
+                    
                     input = Console.ReadLine();
                 }
                 catch (Exception ex)
@@ -66,6 +52,17 @@ namespace ODataClientConsoleApp
                     break;
                 }
             }
+        }
+
+        private static Task MapResult<TOption>(IServiceProvider serviceProvider, ParserResult<TOption> parserResult, IReadOnlyCollection<Type> commandTypes) 
+            where TOption: class 
+        {
+            return parserResult.MapResult(opt =>
+            {
+                var commandType = commandTypes.FirstOrDefault(ct => ct.Name.Equals(parserResult.TypeInfo.Current.Name.Replace("Option", 
+                    (opt is DataModificationBaseOption) ? "BatchCommand" : "Command")));
+                return ((ICommand) serviceProvider.ResolveWith(commandType, opt)).Execute();
+            }, _ => Task.CompletedTask);
         }
 
         private static IServiceProvider ConfigureServices(IServiceCollection serviceCollection)

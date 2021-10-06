@@ -2,7 +2,7 @@
 
 namespace ODataClientConsoleApp.CommandLineOption
 {
-    public class CreateUpdateBaseOption : PersonKeyBaseOption
+    public class CreateUpdateBaseOption : DataModificationBaseOption
     {
         [Option('f', "FirstName", Required = true, HelpText = "FirstName for the Person")]
         public virtual string FirstName { get; set; }
@@ -27,8 +27,5 @@ namespace ODataClientConsoleApp.CommandLineOption
 
         [Option('r', "Region", HelpText = "City Region for the Person", Default = "")]
         public string Region { get; set; }
-
-        [Option('b', "Batch", HelpText = "Operation is Batch mode", Default = false)]
-        public bool Batch { get; set; }
     }
 }
